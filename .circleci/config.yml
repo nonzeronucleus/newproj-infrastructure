@@ -114,13 +114,13 @@ workflows:
   build_plan_approve_apply:
     jobs:
       - build:
-          context: aws
+          context: AWS
       - plan:
-          context: aws
+          context: AWS
           requires:
             - build
       - approve:
-          context: aws
+          context: AWS
           type: approval
           requires:
             - plan
@@ -128,14 +128,14 @@ workflows:
             branches:
               only: master
       - apply-with-approval:
-          context: aws
+          context: AWS
           requires:
             - approve
           filters:
             branches:
               only: master
       - apply:
-          context: aws
+          context: AWS
           requires:
             - plan
           filters:
