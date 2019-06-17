@@ -62,20 +62,10 @@ apply_job: &apply_job
           source $BASH_ENV
           cd terraform/environments/$TERRAFORM_ENVIRONMENT
           terraform apply --auto-approve ../../../terraform.plan
-    - run:
-        name: terraform apply
-        command: |
-          source $BASH_ENV
-          cd /
-          ls -ltR
 
     - store_artifacts:
-        path: /root/terraform/terraform.tfstate
-        destination: /root/terraform/terraform.tfstate
-
-    - store_artifacts:
-        path: terraform/terraform.tfstate
-        destination: terraform/terraform.tfstate
+        path: terraform/environments/production/terraform.tfstate
+        destination: terraform.tfstate
 
 
 jobs:
