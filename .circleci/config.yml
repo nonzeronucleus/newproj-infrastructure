@@ -103,6 +103,9 @@ jobs:
           root: *working_directory
           paths:
             - terraform.plan
+      - store_artifacts:
+          path: terraform.plan
+          destination: terraform.plan
 
   apply:
     <<: *apply_job
