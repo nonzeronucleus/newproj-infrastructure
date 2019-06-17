@@ -63,8 +63,13 @@ apply_job: &apply_job
           cd terraform/environments/$TERRAFORM_ENVIRONMENT
           terraform apply --auto-approve ../../../terraform.plan
     - store_artifacts:
-        path: terraform.tfstate
-        destination: terraform.tfstate
+        path: /root/terraform/terraform.tfstate
+        destination: /root/terraform/terraform.tfstate
+
+    - store_artifacts:
+        path: terraform/terraform.tfstate
+        destination: terraform/terraform.tfstate
+
 
 jobs:
   build:
