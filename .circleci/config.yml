@@ -90,7 +90,7 @@ jobs:
 
         - run:
             name: Create dir
-            command: mkdir ~/terraform/environment/production
+            command: mkdir -p ~/terraform/environment/production
 
         - run:
             name: Deploy from S3
