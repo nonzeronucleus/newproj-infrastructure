@@ -148,8 +148,8 @@ jobs:
       - *restore_repo
       - *set_terraform_environment
       - *terraform_init
-    - attach_workspace:
-        at: *working_directory
+      - attach_workspace:
+          at: *working_directory
 
       - run:
           name: List
