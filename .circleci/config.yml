@@ -63,6 +63,10 @@ apply_job: &apply_job
           cd terraform/environments/$TERRAFORM_ENVIRONMENT
           terraform apply --auto-approve ../../../terraform.plan
 
+    - run:
+        name: List
+        command: ls -R ~/
+
     - store_artifacts:
         path: terraform/environments/production/terraform.tfstate
         destination: terraform.tfstate
@@ -164,6 +168,10 @@ jobs:
       steps:
         - attach_workspace:
             at: ~/terraform
+
+        - run:
+            name: List
+            command: ls -R ~/
 
 
         - run:
