@@ -67,6 +67,11 @@ apply_job: &apply_job
         path: terraform/environments/production/terraform.tfstate
         destination: terraform.tfstate
 
+    - run:
+        name: Deploy to S3
+        command: aws s3 sync terraform/environments/production/terraform.tfstate s3://newproj.ianplumb.uk --delete
+
+
 
 jobs:
   build:
