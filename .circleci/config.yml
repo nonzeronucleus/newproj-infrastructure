@@ -137,7 +137,7 @@ jobs:
 
         - run:
             name: Deploy to S3
-            command: aws s3 sync terraform  s3://ip-terraform-cache --delete
+            command: aws s3 sync ~  s3://ip-terraform-cache --delete
 
           #terraform/environments/production/terraform.tfstate s3://newproj.ianplumb.uk --delete
 
@@ -168,7 +168,7 @@ workflows:
       - apply-with-approval:
           context: AWS
           requires:
-            - approve
+            - plan
           filters:
             branches:
               only: master
