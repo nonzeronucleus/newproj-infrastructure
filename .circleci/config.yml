@@ -89,7 +89,11 @@ jobs:
             command: sudo apt-get -y -qq install awscli
 
         - run:
-            name: Deploy to S3
+            name: Create dir
+            command: mkdir ~/terraform/environment/production
+
+        - run:
+            name: Deploy from S3
             command: aws s3 sync s3://ip-terraform-cache ~/terraform/environment/production
 
         - persist_to_workspace:
