@@ -56,6 +56,12 @@ apply_job: &apply_job
     - *terraform_init
     - attach_workspace:
         at: *working_directory
+
+
+    - run:
+        name: List
+        command: ls -ltR ~/
+
     - run:
         name: terraform apply
         command: |
@@ -65,7 +71,7 @@ apply_job: &apply_job
 
     - run:
         name: List
-        command: ls -R ~/
+        command: ls -ltR ~/
 
     - store_artifacts:
         path: terraform/environments/production/terraform.tfstate
@@ -107,10 +113,10 @@ jobs:
         - persist_to_workspace:
             # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
         # taken to be the root directory of the workspace.
-            root: ~/terraform/environments/
+            root: ~
             # Must be relative path from root
             paths:
-                - production
+                - terraform/environments/production
 
 
   build:
@@ -142,8 +148,8 @@ jobs:
       - *restore_repo
       - *set_terraform_environment
       - *terraform_init
-      - attach_workspace:
-          at: ~/terraform/environments
+    - attach_workspace:
+        at: *working_directory
 
       - run:
           name: List
