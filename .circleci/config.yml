@@ -68,6 +68,10 @@ apply_job: &apply_job
         destination: terraform.tfstate
 
     - run:
+        name: Install aws cli
+        command: sudo apt-get -y -qq install awscli
+
+    - run:
         name: Deploy to S3
         command: aws s3 sync terraform/environments/production/terraform.tfstate s3://newproj.ianplumb.uk --delete
 
