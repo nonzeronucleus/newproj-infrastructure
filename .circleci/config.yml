@@ -67,13 +67,32 @@ apply_job: &apply_job
         path: terraform/environments/production/terraform.tfstate
         destination: terraform.tfstate
 
-    - run:
-        name: Install aws cli
-        command: sudo apt-get -y -qq install awscli
+    - persist_to_workspace:
+        # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+    # taken to be the root directory of the workspace.
+        root: .
+        # Must be relative path from root
+        paths:
+            - terraform/environments/production/terraform.tfstate
 
-    - run:
-        name: Deploy to S3
-        command: aws s3 sync terraform/environments/production/terraform.tfstate s3://newproj.ianplumb.uk --delete
+export_tf:
+    docker:
+        - image: circleci/node:lts
+
+    steps:
+      - attach_workspace:
+          at: ~/terraform
+
+
+      - run:
+          name: Install aws cli
+          command: sudo apt-get -y -qq install awscli
+
+      - run:
+          name: Deploy to S3
+          command: aws s3 sync terraform  s3://ip-terraform-cache --delete
+
+          #terraform/environments/production/terraform.tfstate s3://newproj.ianplumb.uk --delete
 
 
 
