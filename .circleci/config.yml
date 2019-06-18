@@ -70,10 +70,10 @@ apply_job: &apply_job
     - persist_to_workspace:
         # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
     # taken to be the root directory of the workspace.
-        root: .
+        root: terraform/environments/production/
         # Must be relative path from root
         paths:
-            - terraform/environments/production/terraform.tfstate
+            - terraform.tfstate
 
 
 
@@ -137,7 +137,7 @@ jobs:
 
         - run:
             name: Deploy to S3
-            command: aws s3 sync ~  s3://ip-terraform-cache --delete
+            command: aws s3 sync ~/terraform  s3://ip-terraform-cache --delete
 
           #terraform/environments/production/terraform.tfstate s3://newproj.ianplumb.uk --delete
 
@@ -157,14 +157,14 @@ workflows:
           context: AWS
           requires:
             - build
-      - approve:
-          context: AWS
-          type: approval
-          requires:
-            - plan
-          filters:
-            branches:
-              only: master
+      # - approve:
+      #     context: AWS
+      #     type: approval
+      #     requires:
+      #       - plan
+      #     filters:
+      #       branches:
+      #         only: master
       - apply-with-approval:
           context: AWS
           requires:
