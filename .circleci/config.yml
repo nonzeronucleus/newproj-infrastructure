@@ -75,24 +75,6 @@ apply_job: &apply_job
         paths:
             - terraform/environments/production/terraform.tfstate
 
-export_tf:
-    docker:
-        - image: circleci/node:lts
-
-    steps:
-      - attach_workspace:
-          at: ~/terraform
-
-
-      - run:
-          name: Install aws cli
-          command: sudo apt-get -y -qq install awscli
-
-      - run:
-          name: Deploy to S3
-          command: aws s3 sync terraform  s3://ip-terraform-cache --delete
-
-          #terraform/environments/production/terraform.tfstate s3://newproj.ianplumb.uk --delete
 
 
 
@@ -140,6 +122,26 @@ jobs:
           path: terraform.plan
           destination: terraform.plan
 
+  export_tf:
+      docker:
+          - image: circleci/node:lts
+
+      steps:
+        - attach_workspace:
+            at: ~/terraform
+
+
+        - run:
+            name: Install aws cli
+            command: sudo apt-get -y -qq install awscli
+
+        - run:
+            name: Deploy to S3
+            command: aws s3 sync terraform  s3://ip-terraform-cache --delete
+
+          #terraform/environments/production/terraform.tfstate s3://newproj.ianplumb.uk --delete
+
+
   apply:
     <<: *apply_job
   apply-with-approval:
@@ -177,3 +179,11 @@ workflows:
           filters:
             branches:
               only: staging
+      - export_tf:
+          context: AWS
+          requires:
+            - apply-with-approval
+          filters:
+            branches:
+              only: master
+
