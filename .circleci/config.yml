@@ -90,11 +90,11 @@ jobs:
 
         - run:
             name: Create dir
-            command: mkdir -p ~/terraform/environment/production
+            command: mkdir -p ~/terraform/environments/production
 
         - run:
             name: Deploy from S3
-            command: aws s3 sync s3://ip-terraform-cache ~/terraform/environment/production
+            command: aws s3 sync s3://ip-terraform-cache/terraform.tfstate ~/terraform/environments/production
 
         - persist_to_workspace:
             # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
