@@ -141,7 +141,7 @@ jobs:
 
       - run:
           name: List
-          command: ls -R ~/terraform
+          command: ls -R ~/
 
       - run:
           name: terraform plan
