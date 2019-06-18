@@ -79,6 +79,29 @@ apply_job: &apply_job
 
 
 jobs:
+  import_tf:
+      docker:
+          - image: circleci/node:lts
+
+      steps:
+        - run:
+            name: Install aws cli
+            command: sudo apt-get -y -qq install awscli
+
+        - run:
+            name: Deploy to S3
+            command: aws s3 sync s3://ip-terraform-cache ~/terraform/environment/production
+
+        - persist_to_workspace:
+            # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+        # taken to be the root directory of the workspace.
+            root: terraform/environments/production/
+            # Must be relative path from root
+            paths:
+                - terraform.tfstate
+
+
+
   build:
     <<: *default_config
     steps:
@@ -137,9 +160,7 @@ jobs:
 
         - run:
             name: Deploy to S3
-            command: aws s3 sync ~/terraform  s3://ip-terraform-cache --delete
-
-          #terraform/environments/production/terraform.tfstate s3://newproj.ianplumb.uk --delete
+            command: aws s3 sync ~/terraform/terraform.tfstate  s3://ip-terraform-cache --delete
 
 
   apply:
@@ -151,8 +172,15 @@ workflows:
   version: 2
   build_plan_approve_apply:
     jobs:
+      - import_tf:
+          context: AWS
+          filters:
+            branches:
+              only: master
       - build:
           context: AWS
+          requires:
+            - import_tf
       - plan:
           context: AWS
           requires:
