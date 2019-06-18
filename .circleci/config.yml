@@ -94,7 +94,7 @@ jobs:
 
         - run:
             name: Deploy from S3
-            command: aws s3 sync s3://ip-terraform-cache/terraform.tfstate ~/terraform/environments/production
+            command: aws s3 sync s3://ip-terraform-cache ~/terraform/environments/production
 
         - run:
             name: List
