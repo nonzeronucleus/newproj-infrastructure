@@ -57,21 +57,12 @@ apply_job: &apply_job
     - attach_workspace:
         at: *working_directory
 
-
-    - run:
-        name: List
-        command: ls -ltR ~/
-
     - run:
         name: terraform apply
         command: |
           source $BASH_ENV
           cd terraform/environments/$TERRAFORM_ENVIRONMENT
           terraform apply --auto-approve ../../../terraform.plan
-
-    - run:
-        name: List
-        command: ls -ltR ~/
 
     - store_artifacts:
         path: terraform/environments/production/terraform.tfstate
@@ -105,10 +96,6 @@ jobs:
         - run:
             name: Deploy from S3
             command: aws s3 sync s3://ip-terraform-cache ~/terraform/environments/production
-
-        - run:
-            name: List
-            command: ls ~/terraform/environments/production
 
         - persist_to_workspace:
             # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
@@ -152,10 +139,6 @@ jobs:
           at: *working_directory
 
       - run:
-          name: List
-          command: ls -R ~/
-
-      - run:
           name: terraform plan
           command: |
             source $BASH_ENV
@@ -176,11 +159,6 @@ jobs:
       steps:
         - attach_workspace:
             at: ~/terraform
-
-        - run:
-            name: List
-            command: ls -R ~/
-
 
         - run:
             name: Install aws cli
