@@ -12,6 +12,10 @@ data "aws_acm_certificate" "cert" {
 resource "aws_s3_bucket" "site" {
   bucket = "${var.subdomain}.${var.domain}"
   acl = "public-read"
+  tags = {
+    Name = "${var.subdomain}.${var.domain}"
+  }
+
 
   policy = <<EOF
 {
