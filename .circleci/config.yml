@@ -190,6 +190,11 @@ jobs:
             name: Deploy to S3
             command: aws s3 sync ~/terraform/production  s3://ip-terraform-cache --delete
 
+        - run:
+            name: Deploy to S3
+            command: aws s3 sync ~/terraform/production  s3://ip-terraform-cache/newproj.ianplumb.uk/ --delete
+
+
 
   apply:
     <<: *apply_job
