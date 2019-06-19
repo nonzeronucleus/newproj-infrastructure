@@ -48,11 +48,6 @@ resource "aws_route53_record" "root_domain" {
   name = "${var.subdomain}.${var.domain}"
   type = "A"
 
-  tags = {
-    site = "${var.subdomain}.${var.domain}"
-  }
-
-
   alias {
     name = "${aws_cloudfront_distribution.cdn.domain_name}"
     zone_id = "${aws_cloudfront_distribution.cdn.hosted_zone_id}"
